@@ -178,16 +178,56 @@ Estos requerimientos aplican a todos los modulos y son base de evaluacion de bue
 
 **Vistas involucradas:** `Cursos`, `Categorias`
 
+**Estado del front:** listo para conectar con API Spring Boot mediante variables de entorno.
+
+**Ruta principal:** `/course-catalog`
+
+**Archivos clave del modulo:**
+
+- `src/pages/course-catalog/CourseCatalogPage.jsx`: vista principal del catalogo, filtros, detalle y CRUD de cursos.
+- `src/services/tid.js`: cliente de datos centralizado. Usa API real cuando `VITE_USE_MOCK=false` y `VITE_API_URL` tiene valor.
+- `src/router/loaders.js`: carga inicial de cursos, categorias e inscripciones antes de renderizar la vista.
+- `src/components/components.jsx`: componentes reutilizables como `CourseCard`, `Modal`, `Spinner`, `EmptyState` y `ErrorState`.
+
+**Configuracion para backend:**
+
+Crear un archivo `.env` tomando como base `.env.example`:
+
+```env
+VITE_API_URL=http://localhost:8080/api
+VITE_USE_MOCK=false
+VITE_CURSOS_PATH=/cursos
+VITE_CATEGORIAS_PATH=/categorias
+VITE_INSCRIPCIONES_PATH=/inscripciones
+```
+
+Si el backend usa rutas diferentes, ajustar solo los valores `VITE_*_PATH` sin tocar los componentes.
+
+**Contrato de datos esperado por el front:**
+
+- Curso: `id`, `titulo`, `categoria_id` o `categoriaId`, `instructor`, `duracion`, `nivel`, `inscritos`, `max` o `cuposMaximos`, `descripcion`, `imagen`.
+- Categoria: `id`, `nombre`, `color`.
+- Inscripcion: `id`, `usuario_id` o `usuarioId`, `curso_id` o `cursoId`, `fecha`, `estado`, `progreso`.
+
+El front normaliza respuestas tipo arreglo directo, `{ data: [...] }`, `{ content: [...] }` o `{ items: [...] }`.
+
 **Lista de requerimientos:**
 
-- [ ] Cargar cursos consumiendo endpoint de cursos al montar la vista.
-- [ ] Renderizar tarjetas de cursos con componentes React.
-- [ ] Implementar estado de carga, estado vacio y manejo de error de consumo.
-- [ ] Implementar filtro por categoria sin recargar la pagina.
-- [ ] Al cambiar filtro, actualizar listado renderizado en tiempo real.
-- [ ] (Opcional avanzado) Mostrar contador por categoria.
-- [ ] Implementar CRUD completo del modulo y evidenciarlo con flujo funcional de punta a punta.
-- [ ] Agregar minimo 2 actividades propias que aporten personalidad y funcionalidad al modulo.
+- [x] Cargar cursos consumiendo endpoint de cursos al montar la vista.
+- [x] Renderizar tarjetas de cursos con componentes React.
+- [x] Implementar estado de carga, estado vacio y manejo de error de consumo.
+- [x] Implementar filtro por categoria sin recargar la pagina.
+- [x] Al cambiar filtro, actualizar listado renderizado en tiempo real.
+- [x] (Opcional avanzado) Mostrar contador por categoria.
+- [x] Implementar CRUD completo del modulo y evidenciarlo con flujo funcional de punta a punta.
+- [x] Agregar minimo 2 actividades propias que aporten personalidad y funcionalidad al modulo.
+
+**Actividades propias implementadas:**
+
+- Busqueda por titulo y descripcion en tiempo real.
+- Filtro por nivel (`Basico`, `Intermedio`, `Avanzado`).
+- Modal de detalle del curso con datos clave y accion de inscripcion.
+- Validaciones de formulario y feedback visual en crear, editar y eliminar.
 
 ### Modulo 3: Gestion de Inscripciones
 
