@@ -29,6 +29,7 @@ export default function CourseCatalogPage() {
   const [filtroCategoria, setFiltroCategoria] = React.useState(null);
   const [busqueda, setBusqueda] = React.useState('');
   const [filtroNivel, setFiltroNivel] = React.useState(null);
+  const [soloDisponibles, setSoloDisponibles] = React.useState(false);
   const [detalleCurso, setDetalleCurso] = React.useState(null);
   const [modalCurso, setModalCurso] = React.useState(null);
 
@@ -127,6 +128,7 @@ export default function CourseCatalogPage() {
   const cursosFiltrados = cursos.filter((c) => {
     if (filtroCategoria && c.categoria_id !== filtroCategoria) return false;
     if (filtroNivel && c.nivel !== filtroNivel) return false;
+    if (soloDisponibles && c.max > 0 && c.inscritos >= c.max) return false;
     if (busqueda && !c.titulo.toLowerCase().includes(busqueda.toLowerCase()) && !c.descripcion.toLowerCase().includes(busqueda.toLowerCase())) return false;
     return true;
   });
@@ -185,6 +187,13 @@ export default function CourseCatalogPage() {
               {n}
             </span>
           ))}
+          <span
+            className={`tag ${soloDisponibles ? 'tag-active' : 'tag-inactive'}`}
+            onClick={() => setSoloDisponibles((value) => !value)}
+            style={{ fontSize: 11 }}
+          >
+            Con cupos
+          </span>
         </div>
       </div>
 

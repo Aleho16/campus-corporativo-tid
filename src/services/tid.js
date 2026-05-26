@@ -97,7 +97,7 @@ export const TID_MOCK = {
     { id: 5, nombre: 'Seguridad', color: '#ef4444' },
   ],
   cursos: [
-    { id: 1, titulo: 'React Avanzado', categoria_id: 1, instructor: 'Ana Gómez', duracion: '40h', nivel: 'Avanzado', inscritos: 28, max: 30, descripcion: 'Domina hooks, context, performance y patrones avanzados de React.', imagen: null },
+    { id: 1, titulo: 'React Avanzado', categoria_id: 1, instructor: 'Ana Gómez', duracion: '40h', nivel: 'Avanzado', inscritos: 28, max: 28, descripcion: 'Domina hooks, context, performance y patrones avanzados de React.', imagen: null },
     { id: 2, titulo: 'Comunicación Efectiva', categoria_id: 2, instructor: 'Luis Herrera', duracion: '20h', nivel: 'Básico', inscritos: 15, max: 25, descripcion: 'Desarrolla habilidades de comunicación asertiva en entornos corporativos.', imagen: null },
     { id: 3, titulo: 'Cumplimiento Normativo', categoria_id: 3, instructor: 'Carlos Méndez', duracion: '16h', nivel: 'Intermedio', inscritos: 40, max: 50, descripcion: 'Marco regulatorio, políticas internas y ética empresarial.', imagen: null },
     { id: 4, titulo: 'Liderazgo Situacional', categoria_id: 4, instructor: 'Ana Gómez', duracion: '30h', nivel: 'Intermedio', inscritos: 12, max: 20, descripcion: 'Modelos de liderazgo adaptativo para equipos de alto rendimiento.', imagen: null },
