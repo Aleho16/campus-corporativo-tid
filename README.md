@@ -205,7 +205,7 @@ Si el backend usa rutas diferentes, ajustar solo los valores `VITE_*_PATH` sin t
 
 **Contrato de datos esperado por el front:**
 
-- Curso: `id`, `titulo`, `categoria_id` o `categoriaId`, `instructor`, `duracion`, `nivel`, `inscritos`, `max` o `cuposMaximos`, `descripcion`, `imagen`.
+- Curso: `id`, `titulo`, `categoria_id` o `categoriaId`, `instructor_id` o `instructorId`, `instructor`, `duracion`, `nivel`, `inscritos`, `max` o `cuposMaximos`, `descripcion`, `imagen`.
 - Categoria: `id`, `nombre`, `color`.
 - Inscripcion: `id`, `usuario_id` o `usuarioId`, `curso_id` o `cursoId`, `fecha`, `estado`, `progreso`.
 
@@ -228,6 +228,7 @@ El front normaliza respuestas tipo arreglo directo, `{ data: [...] }`, `{ conten
 - Filtro por nivel (`Basico`, `Intermedio`, `Avanzado`).
 - Modal de detalle del curso con datos clave y accion de inscripcion.
 - Validaciones de formulario y feedback visual en crear, editar y eliminar.
+- Control por rol: solo usuarios con rol `Instructor` pueden crear cursos; el instructor queda asociado automaticamente al curso creado.
 
 ### Modulo 3: Gestion de Inscripciones
 

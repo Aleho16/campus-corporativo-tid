@@ -22,6 +22,9 @@ export default function CourseCatalogPage() {
   const revalidator = useRevalidator();
   const { session } = useRouteLoaderData('root');
   const { cursos, categorias, inscripciones } = useLoaderData();
+  const isAdmin = session?.rol === 'Admin';
+  const isInstructor = session?.rol === 'Instructor';
+  const canCreateCurso = isInstructor;
 
   const [filtroCategoria, setFiltroCategoria] = React.useState(null);
   const [busqueda, setBusqueda] = React.useState('');
@@ -55,7 +58,16 @@ export default function CourseCatalogPage() {
   const [savingCurso, setSavingCurso] = React.useState(false);
 
   const openCreateCurso = () => {
-    setFormCurso({ titulo: '', categoria_id: '', instructor: '', duracion: '', nivel: 'Basico', max: 30, descripcion: '' });
+    setFormCurso({
+      titulo: '',
+      categoria_id: '',
+      instructor: isInstructor ? session.nombre : '',
+      instructor_id: isInstructor ? session.id : '',
+      duracion: '',
+      nivel: 'Basico',
+      max: 30,
+      descripcion: '',
+    });
     setModalCurso('create');
   };
   const openEditCurso = (c) => {
@@ -78,6 +90,7 @@ export default function CourseCatalogPage() {
         ...formCurso,
         titulo: formCurso.titulo.trim(),
         instructor: formCurso.instructor.trim(),
+        instructor_id: isInstructor ? session.id : formCurso.instructor_id || '',
         descripcion: formCurso.descripcion?.trim() || '',
         categoria_id: Number(formCurso.categoria_id),
         max: cuposMaximos,
@@ -119,6 +132,11 @@ export default function CourseCatalogPage() {
   });
 
   const isInscrito = (cursoId) => inscripciones.some((i) => i.curso_id === cursoId);
+  const canManageCurso = (curso) => {
+    if (isAdmin) return true;
+    if (!isInstructor) return false;
+    return curso.instructor_id === session.id || curso.instructor === session.nombre;
+  };
 
   return (
     <div>
@@ -129,7 +147,7 @@ export default function CourseCatalogPage() {
             {cursos.length} cursos disponibles - {inscripciones.length} inscripciones activas
           </p>
         </div>
-        {session?.rol === 'Admin' && (
+        {canCreateCurso && (
           <button className="btn btn-primary" onClick={openCreateCurso}>
             <Plus size={16} /> Nuevo curso
           </button>
@@ -177,7 +195,7 @@ export default function CourseCatalogPage() {
           {cursosFiltrados.map((c) => (
             <div key={c.id} style={{ position: 'relative' }}>
               <CourseCard curso={c} categorias={categorias} inscrito={isInscrito(c.id)} onEnroll={handleEnroll} onDetail={setDetalleCurso} />
-              {session?.rol === 'Admin' && (
+              {canManageCurso(c) && (
                 <div style={{ position: 'absolute', top: 8, right: 8, display: 'flex', gap: 4 }}>
                   <button className="btn btn-secondary btn-sm" style={{ padding: '3px 8px', fontSize: 11 }} onClick={() => openEditCurso(c)}>
                     <Pencil size={14} />
@@ -295,7 +313,13 @@ export default function CourseCatalogPage() {
           </div>
           <div className="grid-2">
             <FormField label="Instructor">
-              <input className="form-input" value={formCurso.instructor || ''} onChange={(e) => setFormCurso((p) => ({ ...p, instructor: e.target.value }))} placeholder="Nombre del instructor" />
+              <input
+                className="form-input"
+                value={formCurso.instructor || ''}
+                onChange={(e) => setFormCurso((p) => ({ ...p, instructor: e.target.value }))}
+                placeholder="Nombre del instructor"
+                disabled={isInstructor}
+              />
             </FormField>
             <FormField label="Duracion">
               <input className="form-input" value={formCurso.duracion || ''} onChange={(e) => setFormCurso((p) => ({ ...p, duracion: e.target.value }))} placeholder="Ej: 40h" />

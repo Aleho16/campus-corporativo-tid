@@ -43,6 +43,7 @@ const normalizeCourse = (curso) => ({
   id: curso.id,
   titulo: curso.titulo || curso.nombre || curso.title || '',
   categoria_id: Number(curso.categoria_id ?? curso.categoriaId ?? curso.categoria?.id ?? 0),
+  instructor_id: Number(curso.instructor_id ?? curso.instructorId ?? curso.instructor?.id ?? 0),
   instructor: curso.instructor || curso.docente || '',
   duracion: curso.duracion || curso.duracionHoras || '',
   nivel: normalizeLevel(curso.nivel),
@@ -72,6 +73,7 @@ const normalizeEnrollment = (inscripcion) => ({
 const coursePayload = (data) => ({
   ...data,
   categoriaId: Number(data.categoria_id),
+  instructorId: data.instructor_id ? Number(data.instructor_id) : null,
   cuposMaximos: Number(data.max),
 });
 
