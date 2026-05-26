@@ -9,6 +9,19 @@ const ENDPOINTS = {
 
 const buildUrl = (path) => `${API_BASE}${path.startsWith('/') ? path : `/${path}`}`;
 
+const withQuery = (path, params = {}) => {
+  const query = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      query.set(key, value);
+    }
+  });
+
+  const queryString = query.toString();
+  return queryString ? `${path}?${queryString}` : path;
+};
+
 const unwrapList = (payload) => {
   if (Array.isArray(payload)) return payload;
   if (Array.isArray(payload?.content)) return payload.content;
@@ -260,7 +273,7 @@ export const tidApi = {
   },
   async getInscripciones(usuario_id) {
     if (!USE_MOCK) {
-      const payload = await request(`${ENDPOINTS.inscripciones}?usuarioId=${usuario_id}`);
+      const payload = await request(withQuery(ENDPOINTS.inscripciones, { usuarioId: usuario_id }));
       return unwrapList(payload).map(normalizeEnrollment);
     }
     await delay(400);
